@@ -13,12 +13,13 @@ fi
 
 CONFIG=riscv
 CONFIGFILE=${CONFIG}.cfg
-RUN="spike pk -c "
+RUN="taskset -c 3"
 CMD_FILE=commands.txt
-INPUT_TYPE=test
+INPUT_TYPE="${INPUT_TYPE:-test}"
 
 # the integer set
-BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
+#BENCHMARKS=(400.perlbench 401.bzip2 403.gcc 429.mcf 445.gobmk 456.hmmer 458.sjeng 462.libquantum 464.h264ref 471.omnetpp 473.astar 483.xalancbmk)
+BENCHMARKS=(471.omnetpp 473.astar 483.xalancbmk 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref)
 
 # idiomatic parameter and option handling in sh
 compileFlag=false
@@ -59,14 +60,14 @@ echo ""
 
 BUILD_DIR=$PWD/build
 COPY_DIR=$PWD/${CONFIG}-spec-${INPUT_TYPE}
-mkdir -p build;
+mkdir -p build
 
 # compile the binaries
 if [ "$compileFlag" = true ]; then
    echo "Compiling SPEC..."
    # copy over the config file we will use to compile the benchmarks
    cp $BUILD_DIR/../${CONFIGFILE} $SPEC_DIR/config/${CONFIGFILE}
-   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup int
+   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action setup ${BENCHMARKS[@]}
 #   cd $SPEC_DIR; . ./shrc; time runspec --config ${CONFIG} --size ${INPUT_TYPE} --action scrub int
 
    if [ "$copyFlag" = true ]; then
@@ -104,7 +105,10 @@ if [ "$compileFlag" = true ]; then
          mkdir -p $COPY_DIR/$b
          cp -r $BUILD_DIR/../commands $COPY_DIR/commands
          cp $BUILD_DIR/../run.sh $COPY_DIR/run.sh
-         sed -i '4s/.*/INPUT_TYPE='${INPUT_TYPE}' #this line was auto-generated from gen_binaries.sh/' $COPY_DIR/run.sh
+         sed -i '3s/.*/TARGET_RUN=\"'"$RUN"'\" #this line was auto-generated from gen_binaries.sh/' $COPY_DIR/run.sh
+         sed -i '4s/.*/INPUT_TYPE='"$INPUT_TYPE"' #this line was auto-generated from gen_binaries.sh/' $COPY_DIR/run.sh
+         BENCHMARKS_STR="${BENCHMARKS[@]}"
+         sed -i '5s/.*/BENCHMARKS=('"$BENCHMARKS_STR"') #this line was auto-generated from gen_binaries.sh/' $COPY_DIR/run.sh
          for f in $BMK_DIR/*; do
             echo $f
             if [[ -d $f ]]; then
