@@ -10,7 +10,7 @@ export SPEC_DIR=/home/yakush-sc/dev/cpu2006/
 
 export INPUT_TYPE=ref
 #471.omnetpp 483.xalancbmk 473.astar 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref
-export BENCHMARKS_STR="471.omnetpp 483.xalancbmk 473.astar 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref"
+export BENCHMARKS_STR="483.xalancbmk 473.astar 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref 471.omnetpp"
 
 # compile & run remotely
 OUT_DIR_NAME=riscv-spec-$INPUT_TYPE
@@ -59,6 +59,6 @@ TARGET_DIR=$OUT_DIR_NAME-$RUN_TAG
 rsync --info=progress2 -r $OUT_DIR_NAME/ /nfs/pub/cpu2006/$TARGET_DIR
 
 echo "Running in /nfs/pub/cpu2006/$TARGET_DIR"
-ssh sdk@192.168.1.214 "cd /mnt/nfs/cpu2006/$TARGET_DIR; nohup ./run.sh"
+ssh sdk@192.168.1.214 "cd /mnt/nfs/cpu2006/$TARGET_DIR; screen -d -m ./run.sh"
 
 #rsync --info=progress2 -r /nfs/pub/cpu2006/$TARGET_DIR/output ./$OUT_DIR_NAME/
