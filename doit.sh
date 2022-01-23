@@ -6,11 +6,12 @@
 export PATH="$PATH:/home/yakush-sc/dev/riscv-rel/riscv-gcc-11.1.0-g477443e-211230T1056/bin"
 #export PATH="$PATH:/home/yakush-sc/dev/sc-ide/out/riscv-gcc-10.1.0-gaeccc7a-220110T2139/bin"
 
-export SPEC_DIR=/home/yakush-sc/dev/cpu2006/
+# INFO: mount & install SPEC: mount SPEC2006 sudo mount -o loop /mnt/c/Devel/cpu2006-1.2.iso /home/yakush-sc/dev/spec2006/
+export SPEC_DIR=/home/yakush-sc/dev/bench/cpu2006/
 
-export INPUT_TYPE=ref
-#471.omnetpp 483.xalancbmk 473.astar 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref
-export BENCHMARKS_STR="483.xalancbmk 473.astar 456.hmmer 403.gcc 400.perlbench 429.mcf 401.bzip2 445.gobmk 458.sjeng 462.libquantum 464.h264ref 471.omnetpp"
+export INPUT_TYPE=test
+#471.omnetpp 483.xalancbmk 403.gcc 473.astar 429.mcf 445.gobmk 400.perlbench 458.sjeng 462.libquantum 401.bzip2 456.hmmer 464.h264ref
+export BENCHMARKS_STR="471.omnetpp 483.xalancbmk 403.gcc 473.astar 429.mcf 445.gobmk 400.perlbench 458.sjeng 462.libquantum 401.bzip2 456.hmmer 464.h264ref"
 
 # compile & run remotely
 OUT_DIR_NAME=riscv-spec-$INPUT_TYPE
@@ -59,6 +60,6 @@ TARGET_DIR=$OUT_DIR_NAME-$RUN_TAG
 rsync --info=progress2 -r $OUT_DIR_NAME/ /nfs/pub/cpu2006/$TARGET_DIR
 
 echo "Running in /nfs/pub/cpu2006/$TARGET_DIR"
-ssh sdk@192.168.1.214 "cd /mnt/nfs/cpu2006/$TARGET_DIR; screen -d -m ./run.sh"
+ssh sdk@192.168.1.155 "cd /mnt/nfs/cpu2006/$TARGET_DIR; screen -d -m ./run.sh"
 
 #rsync --info=progress2 -r /nfs/pub/cpu2006/$TARGET_DIR/output ./$OUT_DIR_NAME/

@@ -13,7 +13,7 @@ fi
 
 CONFIG=riscv
 CONFIGFILE=${CONFIG}.cfg
-RUN="taskset -c 3"
+RUN="taskset -c 1"
 CMD_FILE=commands.txt
 INPUT_TYPE="${INPUT_TYPE:-test}"
 
