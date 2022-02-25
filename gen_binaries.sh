@@ -11,7 +11,7 @@ if [ -z  "$SPEC_DIR" ]; then
    exit 1
 fi
 
-CONFIG=riscv
+CONFIG="${CONFIG:-riscv}"
 CONFIGFILE=${CONFIG}.cfg
 RUN="taskset -c 0"
 CMD_FILE=commands.txt
